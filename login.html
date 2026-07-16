@@ -214,8 +214,8 @@
 
     <form id="loginForm" novalidate>
       <div class="field">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required />
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="abcd" autocomplete="username" required />
       </div>
       <div class="field">
         <label for="password">Password</label>
@@ -238,25 +238,44 @@
 
   <script>
     (function () {
+      // demo credentials — client-side only, NOT real security
+      const VALID_USER = "abcd";
+      const VALID_PASS = "1234";
+
+      // already signed in? skip the form
+      if (sessionStorage.getItem("auth") === "1") {
+        window.location.replace("index.html");
+        return;
+      }
+
       const form = document.getElementById("loginForm");
       const status = document.getElementById("status");
 
       form.addEventListener("submit", function (e) {
         e.preventDefault();
-        const email = form.email.value.trim();
-        const password = form.password.value;
+        const user = form.username.value.trim();
+        const pass = form.password.value;
 
-        if (!email || !password) {
-          status.textContent = "⚠ enter both email and password";
+        if (!user || !pass) {
+          status.textContent = "⚠ enter both username and password";
           status.style.color = "var(--signal-2)";
           status.classList.add("show");
           return;
         }
 
+        if (user !== VALID_USER || pass !== VALID_PASS) {
+          status.textContent = "✕ invalid credentials — try again";
+          status.style.color = "var(--signal-2)";
+          status.classList.add("show");
+          form.password.value = "";
+          return;
+        }
+
+        sessionStorage.setItem("auth", "1");
         status.textContent = "✓ connection established — signing in…";
         status.style.color = "var(--signal)";
         status.classList.add("show");
-        // front-end demo only — wire up to a real backend to authenticate
+        setTimeout(function () { window.location.href = "index.html"; }, 700);
       });
     })();
   </script>
