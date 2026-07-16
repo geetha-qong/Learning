@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>about — geetha</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --void:      #0a0e1a;
+      --void-2:    #111726;
+      --ink:       #f2f5ff;
+      --muted:     #6b7590;
+      --signal:    #7dd3c0;
+      --signal-2:  #f0b866;
+      --line:      rgba(125, 211, 192, 0.14);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: radial-gradient(120% 60% at 50% 0%, var(--void-2) 0%, var(--void) 55%);
+      color: var(--ink);
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      min-height: 100vh;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 64px 64px;
+      -webkit-mask-image: radial-gradient(120% 90% at 50% 0%, #000 20%, transparent 75%);
+      mask-image: radial-gradient(120% 90% at 50% 0%, #000 20%, transparent 75%);
+      opacity: 0.4;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* shared navigation */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem clamp(1.25rem, 5vw, 3rem);
+      font-size: 0.72rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      background: linear-gradient(var(--void) 40%, transparent);
+    }
+    .nav .brand { color: var(--ink); text-decoration: none; font-weight: 500; }
+    .nav .brand .sig { color: var(--signal); }
+    .nav ul { display: flex; gap: clamp(1rem, 4vw, 2.4rem); list-style: none; }
+    .nav a { color: var(--muted); text-decoration: none; transition: color 0.25s ease; position: relative; }
+    .nav a:hover, .nav a:focus-visible { color: var(--signal); }
+    .nav a[aria-current="page"] { color: var(--ink); }
+    .nav a[aria-current="page"]::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: -6px;
+      height: 1px; background: var(--signal-2);
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: clamp(7rem, 16vh, 11rem) clamp(1.5rem, 6vw, 2rem) 6rem;
+    }
+
+    .eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.6rem;
+    }
+    .eyebrow .dot {
+      display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+      background: var(--signal); margin-right: 0.7em; vertical-align: middle;
+    }
+
+    h1 {
+      font-family: "Fraunces", Georgia, serif;
+      font-weight: 300;
+      font-size: clamp(2.6rem, 8vw, 5rem);
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      margin-bottom: 2rem;
+    }
+    h1 em {
+      font-weight: 500;
+      font-style: italic;
+      background: linear-gradient(105deg, var(--signal), var(--signal-2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+
+    .lede {
+      font-family: "Fraunces", Georgia, serif;
+      font-weight: 300;
+      font-size: clamp(1.25rem, 3vw, 1.7rem);
+      line-height: 1.5;
+      color: var(--ink);
+      max-width: 60ch;
+      margin-bottom: 4.5rem;
+    }
+
+    /* transmission log — a real sequence, so numbering earns its place */
+    .log { display: grid; gap: 2.5rem; }
+    .entry {
+      display: grid;
+      grid-template-columns: 3.5rem 1fr;
+      gap: 1.5rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--line);
+    }
+    .entry .idx {
+      font-size: 0.8rem;
+      color: var(--signal);
+      letter-spacing: 0.1em;
+      padding-top: 0.2rem;
+    }
+    .entry h2 {
+      font-family: "Fraunces", Georgia, serif;
+      font-weight: 500;
+      font-size: 1.35rem;
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.01em;
+    }
+    .entry p { color: var(--muted); max-width: 56ch; }
+    .entry p b { color: var(--ink); font-weight: 500; }
+
+    .cta {
+      margin-top: 4.5rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--line);
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+    .cta a {
+      color: var(--signal);
+      text-decoration: none;
+      border-bottom: 1px solid var(--line);
+      transition: border-color 0.25s ease;
+    }
+    .cta a:hover, .cta a:focus-visible { border-color: var(--signal); }
+
+    @media (max-width: 520px) {
+      .entry { grid-template-columns: 1fr; gap: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="brand" href="index.html">geetha<span class="sig">.</span></a>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html" aria-current="page">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="wrap">
+    <p class="eyebrow"><span class="dot"></span>who's transmitting</p>
+    <h1>A little about <em>me</em>.</h1>
+    <p class="lede">
+      I'm Geetha — learning by building, one small page at a time. This corner
+      of the web is where I experiment, break things on purpose, and figure out
+      how they work.
+    </p>
+
+    <div class="log">
+      <div class="entry">
+        <span class="idx">01</span>
+        <div>
+          <h2>Curious by default</h2>
+          <p>I like understanding the <b>why</b> behind things, not just the how. If something works, I want to know what's holding it up.</p>
+        </div>
+      </div>
+      <div class="entry">
+        <span class="idx">02</span>
+        <div>
+          <h2>Building in the open</h2>
+          <p>Every project here starts as a rough sketch and gets refined. Progress over polish — <b>then</b> polish.</p>
+        </div>
+      </div>
+      <div class="entry">
+        <span class="idx">03</span>
+        <div>
+          <h2>Always a beginner at something</h2>
+          <p>The moment a thing feels comfortable, I go find the next thing that doesn't. That's where the <b>interesting work</b> lives.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="cta">
+      Want to say hello back? <a href="contact.html">Reach me here →</a>
+    </p>
+  </main>
+</body>
+</html>

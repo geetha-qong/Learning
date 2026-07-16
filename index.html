@@ -34,6 +34,46 @@
       position: relative;
     }
 
+    /* shared navigation */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem clamp(1.25rem, 5vw, 3rem);
+      font-size: 0.72rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+    .nav .brand {
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .nav .brand .sig { color: var(--signal); }
+    .nav ul {
+      display: flex;
+      gap: clamp(1rem, 4vw, 2.4rem);
+      list-style: none;
+    }
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.25s ease;
+      position: relative;
+    }
+    .nav a:hover, .nav a:focus-visible { color: var(--signal); }
+    .nav a[aria-current="page"] { color: var(--ink); }
+    .nav a[aria-current="page"]::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: -6px;
+      height: 1px;
+      background: var(--signal-2);
+    }
+
     /* faint coordinate grid — the empty space a signal travels through */
     body::before {
       content: "";
@@ -144,6 +184,14 @@
   </style>
 </head>
 <body>
+  <nav class="nav">
+    <a class="brand" href="index.html">geetha<span class="sig">.</span></a>
+    <ul>
+      <li><a href="index.html" aria-current="page">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
   <main class="stage">
     <p class="eyebrow"><span class="dot"></span>incoming transmission</p>
     <h1>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>contact — geetha</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --void:      #0a0e1a;
+      --void-2:    #111726;
+      --ink:       #f2f5ff;
+      --muted:     #6b7590;
+      --signal:    #7dd3c0;
+      --signal-2:  #f0b866;
+      --line:      rgba(125, 211, 192, 0.14);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: radial-gradient(120% 70% at 50% 100%, var(--void-2) 0%, var(--void) 55%);
+      color: var(--ink);
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      min-height: 100vh;
+      position: relative;
+      line-height: 1.6;
+      display: grid;
+      place-items: center;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 64px 64px;
+      -webkit-mask-image: radial-gradient(100% 80% at 50% 55%, #000 25%, transparent 80%);
+      mask-image: radial-gradient(100% 80% at 50% 55%, #000 25%, transparent 80%);
+      opacity: 0.4;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* shared navigation */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem clamp(1.25rem, 5vw, 3rem);
+      font-size: 0.72rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+    .nav .brand { color: var(--ink); text-decoration: none; font-weight: 500; }
+    .nav .brand .sig { color: var(--signal); }
+    .nav ul { display: flex; gap: clamp(1rem, 4vw, 2.4rem); list-style: none; }
+    .nav a { color: var(--muted); text-decoration: none; transition: color 0.25s ease; position: relative; }
+    .nav a:hover, .nav a:focus-visible { color: var(--signal); }
+    .nav a[aria-current="page"] { color: var(--ink); }
+    .nav a[aria-current="page"]::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: -6px;
+      height: 1px; background: var(--signal-2);
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 620px;
+      padding: 6rem clamp(1.5rem, 6vw, 2rem) 4rem;
+      text-align: center;
+    }
+
+    .eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.6rem;
+    }
+    .eyebrow .dot {
+      display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+      background: var(--signal-2); margin-right: 0.7em; vertical-align: middle;
+    }
+
+    h1 {
+      font-family: "Fraunces", Georgia, serif;
+      font-weight: 300;
+      font-size: clamp(2.6rem, 9vw, 5rem);
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.2rem;
+    }
+    h1 em {
+      font-weight: 500;
+      font-style: italic;
+      background: linear-gradient(105deg, var(--signal), var(--signal-2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+
+    .lede {
+      color: var(--muted);
+      max-width: 46ch;
+      margin: 0 auto 3.5rem;
+    }
+
+    /* contact channels */
+    .channels { display: grid; gap: 1rem; text-align: left; }
+    .channel {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.15rem 1.4rem;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      color: var(--ink);
+      text-decoration: none;
+      transition: border-color 0.25s ease, transform 0.25s ease, background 0.25s ease;
+    }
+    .channel:hover, .channel:focus-visible {
+      border-color: var(--signal);
+      background: rgba(125, 211, 192, 0.05);
+      transform: translateX(4px);
+    }
+    .channel .label {
+      font-size: 0.68rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+    .channel .value { font-size: 0.98rem; word-break: break-all; }
+    .channel .arrow { color: var(--signal); flex-shrink: 0; transition: transform 0.25s ease; }
+    .channel:hover .arrow, .channel:focus-visible .arrow { transform: translateX(4px); }
+
+    .footnote {
+      margin-top: 3rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+    .footnote a { color: var(--signal); text-decoration: none; }
+    .footnote a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="brand" href="index.html">geetha<span class="sig">.</span></a>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html" aria-current="page">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="wrap">
+    <p class="eyebrow"><span class="dot"></span>send a reply</p>
+    <h1>Let's <em>talk</em>.</h1>
+    <p class="lede">
+      Got a question, an idea, or just want to say hello back? Pick a channel —
+      I read everything.
+    </p>
+
+    <div class="channels">
+      <a class="channel" href="mailto:g.sm@qongsystems.com">
+        <span>
+          <span class="label">Email</span>
+          <span class="value">g.sm@qongsystems.com</span>
+        </span>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="channel" href="https://github.com/" target="_blank" rel="noopener">
+        <span>
+          <span class="label">GitHub</span>
+          <span class="value">github.com/geetha</span>
+        </span>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="channel" href="https://www.linkedin.com/" target="_blank" rel="noopener">
+        <span>
+          <span class="label">LinkedIn</span>
+          <span class="value">linkedin.com/in/geetha</span>
+        </span>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <p class="footnote">
+      Prefer the scenic route? Head back <a href="index.html">home</a> or read
+      <a href="about.html">about me</a>.
+    </p>
+  </main>
+</body>
+</html>
