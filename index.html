@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hello, world</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --void:      #0a0e1a;
+      --void-2:    #111726;
+      --ink:       #f2f5ff;
+      --muted:     #6b7590;
+      --signal:    #7dd3c0;   /* cool arrival */
+      --signal-2:  #f0b866;   /* warm reply   */
+      --line:      rgba(125, 211, 192, 0.14);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body { height: 100%; }
+
+    body {
+      background:
+        radial-gradient(120% 80% at 50% 0%, var(--void-2) 0%, var(--void) 55%);
+      color: var(--ink);
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* faint coordinate grid — the empty space a signal travels through */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 64px 64px;
+      -webkit-mask-image: radial-gradient(100% 70% at 50% 45%, #000 30%, transparent 80%);
+      mask-image: radial-gradient(100% 70% at 50% 45%, #000 30%, transparent 80%);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .stage {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      max-width: min(90vw, 720px);
+    }
+
+    .eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2.2rem;
+      opacity: 0;
+      animation: rise 0.8s ease forwards;
+    }
+    .eyebrow .dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--signal);
+      margin-right: 0.7em;
+      vertical-align: middle;
+      box-shadow: 0 0 0 0 var(--signal);
+      animation: pulse 2.4s ease-out infinite;
+    }
+
+    h1 {
+      font-family: "Fraunces", Georgia, serif;
+      font-weight: 300;
+      font-size: clamp(3rem, 12vw, 7.5rem);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+    }
+
+    h1 .hello {
+      display: block;
+      background: linear-gradient(105deg, var(--signal) 0%, var(--ink) 55%, var(--signal-2) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      opacity: 0;
+      animation: rise 0.9s ease 0.15s forwards;
+    }
+
+    h1 .world {
+      display: block;
+      font-weight: 500;
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    /* the world types itself in */
+    #typed { white-space: nowrap; }
+    .caret {
+      display: inline-block;
+      width: 0.06em;
+      height: 0.82em;
+      margin-left: 0.05em;
+      background: var(--signal-2);
+      vertical-align: baseline;
+      transform: translateY(0.08em);
+      animation: blink 1s steps(1) infinite;
+    }
+
+    .meta {
+      margin-top: 2.6rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      opacity: 0;
+      animation: rise 0.8s ease 2.1s forwards;
+    }
+    .meta b { color: var(--signal); font-weight: 500; }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+    @keyframes pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(125,211,192,0.5); }
+      70%  { box-shadow: 0 0 0 12px rgba(125,211,192,0); }
+      100% { box-shadow: 0 0 0 0 rgba(125,211,192,0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before { animation: none !important; }
+      .eyebrow, .hello, .meta { opacity: 1; }
+      .caret { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <main class="stage">
+    <p class="eyebrow"><span class="dot"></span>incoming transmission</p>
+    <h1>
+      <span class="hello">hello,</span>
+      <span class="world"><span id="typed"></span><span class="caret" aria-hidden="true"></span></span>
+    </h1>
+    <p class="meta">signal received · <b>connection established</b></p>
+  </main>
+
+  <script>
+    (function () {
+      const target = document.getElementById("typed");
+      const word = "world";
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (reduce) { target.textContent = word; return; }
+
+      let i = 0;
+      const delay = 900; // wait for "hello," to settle
+      setTimeout(function type() {
+        target.textContent = word.slice(0, ++i);
+        if (i < word.length) setTimeout(type, 140);
+      }, delay);
+    })();
+  </script>
+</body>
+</html>
