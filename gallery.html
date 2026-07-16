@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gallery — geetha</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --void:      #0a0e1a;
+      --void-2:    #111726;
+      --ink:       #f2f5ff;
+      --muted:     #6b7590;
+      --signal:    #7dd3c0;
+      --signal-2:  #f0b866;
+      --line:      rgba(125, 211, 192, 0.14);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: radial-gradient(120% 60% at 50% 0%, var(--void-2) 0%, var(--void) 55%);
+      color: var(--ink);
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      min-height: 100vh;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 64px 64px;
+      -webkit-mask-image: radial-gradient(120% 90% at 50% 0%, #000 20%, transparent 75%);
+      mask-image: radial-gradient(120% 90% at 50% 0%, #000 20%, transparent 75%);
+      opacity: 0.4;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* shared navigation */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem clamp(1.25rem, 5vw, 3rem);
+      font-size: 0.72rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      background: linear-gradient(var(--void) 40%, transparent);
+    }
+    .nav .brand { color: var(--ink); text-decoration: none; font-weight: 500; }
+    .nav .brand .sig { color: var(--signal); }
+    .nav ul { display: flex; gap: clamp(0.9rem, 3.5vw, 2.2rem); list-style: none; }
+    .nav a { color: var(--muted); text-decoration: none; transition: color 0.25s ease; position: relative; }
+    .nav a:hover, .nav a:focus-visible { color: var(--signal); }
+    .nav a[aria-current="page"] { color: var(--ink); }
+    .nav a[aria-current="page"]::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: -6px;
+      height: 1px; background: var(--signal-2);
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: clamp(7rem, 15vh, 10rem) clamp(1.5rem, 6vw, 2.5rem) 6rem;
+    }
+
+    .eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.6rem;
+    }
+    .eyebrow .dot {
+      display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+      background: var(--signal); margin-right: 0.7em; vertical-align: middle;
+    }
+
+    h1 {
+      font-family: "Fraunces", Georgia, serif;
+      font-weight: 300;
+      font-size: clamp(2.6rem, 8vw, 5rem);
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+    h1 em {
+      font-weight: 500; font-style: italic;
+      background: linear-gradient(105deg, var(--signal), var(--signal-2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .intro { color: var(--muted); max-width: 54ch; margin-bottom: 3.5rem; }
+
+    /* captured frames */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+    .frame {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+    }
+    .frame:hover, .frame:focus-within {
+      border-color: var(--signal);
+      transform: translateY(-4px);
+    }
+    /* generative "signal capture" — each tile a distinct field */
+    .art { position: absolute; inset: 0; }
+    .art-1 { background:
+      radial-gradient(80% 120% at 20% 10%, rgba(125,211,192,0.55), transparent 60%),
+      radial-gradient(90% 90% at 90% 90%, rgba(240,184,102,0.45), transparent 55%),
+      var(--void-2); }
+    .art-2 { background:
+      repeating-linear-gradient(115deg, rgba(125,211,192,0.35) 0 2px, transparent 2px 16px),
+      linear-gradient(160deg, #16203a, var(--void)); }
+    .art-3 { background:
+      conic-gradient(from 210deg at 65% 40%, var(--signal), var(--signal-2), var(--void-2), var(--signal)); }
+    .art-4 { background:
+      radial-gradient(circle at 50% 50%, transparent 0 18%, rgba(240,184,102,0.4) 18% 19%, transparent 19% 34%, rgba(125,211,192,0.35) 34% 35%, transparent 35%),
+      var(--void-2); }
+    .art-5 { background:
+      linear-gradient(120deg, rgba(125,211,192,0.5), transparent 45%),
+      repeating-radial-gradient(circle at 30% 80%, rgba(240,184,102,0.3) 0 1px, transparent 1px 12px),
+      var(--void); }
+    .art-6 { background:
+      linear-gradient(0deg, var(--void) 0 10%, transparent),
+      repeating-linear-gradient(90deg, rgba(242,245,255,0.14) 0 1px, transparent 1px 9px),
+      linear-gradient(200deg, #1a2540, var(--void-2)); }
+
+    .caption {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 1.6rem 1.1rem 1rem;
+      background: linear-gradient(transparent, rgba(10,14,26,0.92));
+      transform: translateY(28%);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .frame:hover .caption, .frame:focus-within .caption {
+      transform: translateY(0); opacity: 1;
+    }
+    .caption .id {
+      font-size: 0.62rem; letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--signal); display: block; margin-bottom: 0.3rem;
+    }
+    .caption .title { font-family: "Fraunces", Georgia, serif; font-size: 1.1rem; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .frame, .caption { transition: none; }
+      .caption { transform: none; opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="brand" href="index.html">geetha<span class="sig">.</span></a>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="gallery.html" aria-current="page">Gallery</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="wrap">
+    <p class="eyebrow"><span class="dot"></span>captured frames</p>
+    <h1>The <em>gallery</em>.</h1>
+    <p class="intro">
+      A collection of signals worth keeping — snapshots from things I've built,
+      broken, and figured out along the way. Hover a frame to read its log.
+    </p>
+
+    <div class="grid">
+      <figure class="frame" tabindex="0">
+        <div class="art art-1"></div>
+        <figcaption class="caption"><span class="id">Frame 01</span><span class="title">First light</span></figcaption>
+      </figure>
+      <figure class="frame" tabindex="0">
+        <div class="art art-2"></div>
+        <figcaption class="caption"><span class="id">Frame 02</span><span class="title">Interference</span></figcaption>
+      </figure>
+      <figure class="frame" tabindex="0">
+        <div class="art art-3"></div>
+        <figcaption class="caption"><span class="id">Frame 03</span><span class="title">Spectrum sweep</span></figcaption>
+      </figure>
+      <figure class="frame" tabindex="0">
+        <div class="art art-4"></div>
+        <figcaption class="caption"><span class="id">Frame 04</span><span class="title">Concentric</span></figcaption>
+      </figure>
+      <figure class="frame" tabindex="0">
+        <div class="art art-5"></div>
+        <figcaption class="caption"><span class="id">Frame 05</span><span class="title">Scatter field</span></figcaption>
+      </figure>
+      <figure class="frame" tabindex="0">
+        <div class="art art-6"></div>
+        <figcaption class="caption"><span class="id">Frame 06</span><span class="title">Waveform</span></figcaption>
+      </figure>
+    </div>
+  </main>
+</body>
+</html>
