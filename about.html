@@ -4,6 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>about — geetha</title>
+  <script>
+    if (sessionStorage.getItem("auth") !== "1") {
+      window.location.replace("login.html");
+    }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -168,6 +173,7 @@
       <li><a href="about.html" aria-current="page">About</a></li>
       <li><a href="gallery.html">Gallery</a></li>
       <li><a href="contact.html">Contact</a></li>
+      <li><a href="#" id="logoutLink">Logout</a></li>
     </ul>
   </nav>
 
@@ -208,5 +214,13 @@
       Want to say hello back? <a href="contact.html">Reach me here →</a>
     </p>
   </main>
+
+  <script>
+    document.getElementById("logoutLink").addEventListener("click", function (e) {
+      e.preventDefault();
+      sessionStorage.removeItem("auth");
+      window.location.href = "login.html";
+    });
+  </script>
 </body>
 </html>

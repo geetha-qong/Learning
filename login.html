@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>login — geetha</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --void:      #0a0e1a;
+      --void-2:    #111726;
+      --ink:       #f2f5ff;
+      --muted:     #6b7590;
+      --signal:    #7dd3c0;
+      --signal-2:  #f0b866;
+      --line:      rgba(125, 211, 192, 0.14);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: radial-gradient(120% 80% at 50% 0%, var(--void-2) 0%, var(--void) 55%);
+      color: var(--ink);
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      min-height: 100vh;
+      position: relative;
+      line-height: 1.6;
+      display: grid;
+      place-items: center;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 64px 64px;
+      -webkit-mask-image: radial-gradient(100% 70% at 50% 45%, #000 25%, transparent 80%);
+      mask-image: radial-gradient(100% 70% at 50% 45%, #000 25%, transparent 80%);
+      opacity: 0.4;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* shared navigation */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem clamp(1.25rem, 5vw, 3rem);
+      font-size: 0.72rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+    .nav .brand { color: var(--ink); text-decoration: none; font-weight: 500; }
+    .nav .brand .sig { color: var(--signal); }
+    .nav ul { display: flex; gap: clamp(1rem, 4vw, 2.4rem); list-style: none; }
+    .nav a { color: var(--muted); text-decoration: none; transition: color 0.25s ease; position: relative; }
+    .nav a:hover, .nav a:focus-visible { color: var(--signal); }
+    .nav a[aria-current="page"] { color: var(--ink); }
+    .nav a[aria-current="page"]::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: -6px;
+      height: 1px; background: var(--signal-2);
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 420px;
+      padding: 6rem clamp(1.5rem, 6vw, 2rem) 4rem;
+    }
+
+    .eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.4rem;
+      text-align: center;
+    }
+    .eyebrow .dot {
+      display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+      background: var(--signal); margin-right: 0.7em; vertical-align: middle;
+    }
+
+    h1 {
+      font-family: "Fraunces", Georgia, serif;
+      font-weight: 300;
+      font-size: clamp(2.2rem, 8vw, 3.2rem);
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.8rem;
+      text-align: center;
+    }
+    h1 em {
+      font-weight: 500;
+      font-style: italic;
+      background: linear-gradient(105deg, var(--signal), var(--signal-2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+
+    .lede {
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+      margin: 0 auto 2.6rem;
+      max-width: 34ch;
+    }
+
+    /* auth form */
+    form { display: grid; gap: 1.3rem; }
+    .field { display: grid; gap: 0.5rem; }
+    .field label {
+      font-size: 0.68rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .field input {
+      background: rgba(125, 211, 192, 0.04);
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 0.95rem;
+      padding: 0.9rem 1rem;
+      transition: border-color 0.25s ease, background 0.25s ease;
+    }
+    .field input::placeholder { color: var(--muted); opacity: 0.6; }
+    .field input:focus {
+      outline: none;
+      border-color: var(--signal);
+      background: rgba(125, 211, 192, 0.07);
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .row label { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+    .row input { accent-color: var(--signal); }
+    .row a { color: var(--signal); text-decoration: none; }
+    .row a:hover, .row a:focus-visible { text-decoration: underline; }
+
+    button.submit {
+      margin-top: 0.4rem;
+      padding: 0.95rem 1rem;
+      border: 1px solid var(--signal);
+      border-radius: 2px;
+      background: rgba(125, 211, 192, 0.08);
+      color: var(--signal);
+      font-family: inherit;
+      font-size: 0.72rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.25s ease, transform 0.25s ease;
+    }
+    button.submit:hover, button.submit:focus-visible {
+      background: rgba(125, 211, 192, 0.16);
+      transform: translateY(-1px);
+    }
+
+    .status {
+      min-height: 1.2rem;
+      margin-top: 0.4rem;
+      font-size: 0.78rem;
+      text-align: center;
+      color: var(--signal);
+      letter-spacing: 0.06em;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .status.show { opacity: 1; }
+
+    .footnote {
+      margin-top: 2.4rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-align: center;
+    }
+    .footnote a { color: var(--signal); text-decoration: none; }
+    .footnote a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="brand" href="index.html">geetha<span class="sig">.</span></a>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="login.html" aria-current="page">Login</a></li>
+    </ul>
+  </nav>
+
+  <main class="wrap">
+    <p class="eyebrow"><span class="dot"></span>authenticate</p>
+    <h1>Welcome <em>back</em>.</h1>
+    <p class="lede">Enter your credentials to re-establish the connection.</p>
+
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="abcd@example.com" autocomplete="email" required />
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password" required />
+      </div>
+
+      <div class="row">
+        <label><input type="checkbox" name="remember" /> Remember me</label>
+        <a href="#">Forgot password?</a>
+      </div>
+
+      <button type="submit" class="submit">Sign in</button>
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+    </form>
+
+    <p class="footnote">
+      No signal yet? <a href="contact.html">Get in touch</a> · back <a href="index.html">home</a>
+    </p>
+  </main>
+
+  <script>
+    (function () {
+      // demo credentials — client-side only, NOT real security
+      const VALID_EMAIL = "abcd@example.com";
+      const VALID_PASS = "abcd1234";
+      const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const MIN_PASS_LEN = 8;
+
+      // already signed in? skip the form
+      if (sessionStorage.getItem("auth") === "1") {
+        window.location.replace("index.html");
+        return;
+      }
+
+      const form = document.getElementById("loginForm");
+      const status = document.getElementById("status");
+
+      function showError(message) {
+        status.textContent = message;
+        status.style.color = "var(--signal-2)";
+        status.classList.add("show");
+      }
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const email = form.email.value.trim();
+        const pass = form.password.value;
+
+        if (!email || !pass) {
+          showError("⚠ email and password are required");
+          return;
+        }
+
+        if (!EMAIL_RE.test(email)) {
+          showError("⚠ enter a valid email address");
+          return;
+        }
+
+        if (pass.length < MIN_PASS_LEN) {
+          showError("⚠ password must be at least 8 characters");
+          return;
+        }
+
+        if (email !== VALID_EMAIL || pass !== VALID_PASS) {
+          showError("✕ Invalid email or password.");
+          form.password.value = "";
+          return;
+        }
+
+        sessionStorage.setItem("auth", "1");
+        status.textContent = "✓ connection established — signing in…";
+        status.style.color = "var(--signal)";
+        status.classList.add("show");
+        setTimeout(function () { window.location.href = "index.html"; }, 700);
+      });
+    })();
+  </script>
+</body>
+</html>
