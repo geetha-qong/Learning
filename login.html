@@ -214,8 +214,8 @@
 
     <form id="loginForm" novalidate>
       <div class="field">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" placeholder="abcd" autocomplete="username" required />
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="abcd@example.com" autocomplete="email" required />
       </div>
       <div class="field">
         <label for="password">Password</label>
@@ -239,8 +239,10 @@
   <script>
     (function () {
       // demo credentials — client-side only, NOT real security
-      const VALID_USER = "abcd";
-      const VALID_PASS = "1234";
+      const VALID_EMAIL = "abcd@example.com";
+      const VALID_PASS = "abcd1234";
+      const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const MIN_PASS_LEN = 8;
 
       // already signed in? skip the form
       if (sessionStorage.getItem("auth") === "1") {
@@ -251,22 +253,34 @@
       const form = document.getElementById("loginForm");
       const status = document.getElementById("status");
 
+      function showError(message) {
+        status.textContent = message;
+        status.style.color = "var(--signal-2)";
+        status.classList.add("show");
+      }
+
       form.addEventListener("submit", function (e) {
         e.preventDefault();
-        const user = form.username.value.trim();
+        const email = form.email.value.trim();
         const pass = form.password.value;
 
-        if (!user || !pass) {
-          status.textContent = "⚠ enter both username and password";
-          status.style.color = "var(--signal-2)";
-          status.classList.add("show");
+        if (!email || !pass) {
+          showError("⚠ email and password are required");
           return;
         }
 
-        if (user !== VALID_USER || pass !== VALID_PASS) {
-          status.textContent = "✕ invalid credentials — try again";
-          status.style.color = "var(--signal-2)";
-          status.classList.add("show");
+        if (!EMAIL_RE.test(email)) {
+          showError("⚠ enter a valid email address");
+          return;
+        }
+
+        if (pass.length < MIN_PASS_LEN) {
+          showError("⚠ password must be at least 8 characters");
+          return;
+        }
+
+        if (email !== VALID_EMAIL || pass !== VALID_PASS) {
+          showError("✕ Invalid email or password.");
           form.password.value = "";
           return;
         }
